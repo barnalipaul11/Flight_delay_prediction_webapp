@@ -234,208 +234,476 @@ class FlightPredictApp {
 
     // Removed generateFallbackResponse method as requested
 
+    // async sendQuickMessage(message) {
+    //     const chatInput = document.getElementById('floatingChatInput');
+    //     if (chatInput) {
+    //         chatInput.value = message;
+    //         await this.sendMessage();
+    //     }
+    // }
+
+    // async callChatbotAPI(userMessage) {
+    //     const payload = {
+    //         message: userMessage,
+    //         context: {
+    //             current_portal: this.currentPortal,
+    //             conversation_history: this.chatState.messages.slice(-5).map(msg => ({
+    //                 type: msg.type,
+    //                 text: msg.text,
+    //                 timestamp: msg.timestamp
+    //             })), // Last 5 messages for context
+    //             timestamp: new Date().toISOString(),
+    //             available_features: {
+    //                 delay_prediction: true,
+    //                 route_analysis: true,
+    //                 alternative_flights: true,
+    //                 airline_stats: true
+    //             }
+    //         }
+    //     };
+
+    //     console.log('Sending to chatbot API:', payload);
+
+    //     const response = await fetch(this.CHATBOT_API_URL, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Accept': 'application/json'
+    //         },
+    //         body: JSON.stringify(payload)
+    //     });
+
+    //     if (!response.ok) {
+    //         const errorText = await response.text();
+    //         console.error('Chatbot API error details:', {
+    //             status: response.status,
+    //             statusText: response.statusText,
+    //             body: errorText
+    //         });
+    //         throw new Error(`Chatbot API error: ${response.status} - ${response.statusText}`);
+    //     }
+
+    //     const data = await response.json();
+    //     console.log('Chatbot API response:', data);
+        
+    //     return data;
+    // }
+
+    // addMessageToUI(message) {
+    //     const messagesContainer = document.getElementById('floatingChatMessages');
+    //     if (!messagesContainer) return;
+
+    //     const messageElement = document.createElement('div');
+    //     messageElement.className = `message ${message.type}-message`;
+        
+    //     const timeStr = this.formatMessageTime(message.timestamp);
+        
+    //     // Format the message text to handle line breaks and links
+    //     const formattedText = this.formatMessageText(message.text);
+        
+    //     if (message.type === 'bot') {
+    //         messageElement.innerHTML = `
+    //             <div class="message-avatar">
+    //                 <i data-lucide="bot" class="icon"></i>
+    //             </div>
+    //             <div class="message-content">
+    //                 <div class="message-text">${formattedText}</div>
+    //                 <div class="message-time">${timeStr}</div>
+    //             </div>
+    //         `;
+    //     } else {
+    //         messageElement.innerHTML = `
+    //             <div class="message-avatar">
+    //                 <i data-lucide="user" class="icon"></i>
+    //             </div>
+    //             <div class="message-content">
+    //                 <div class="message-text">${this.escapeHtml(message.text)}</div>
+    //                 <div class="message-time">${timeStr}</div>
+    //             </div>
+    //         `;
+    //     }
+
+    //     messagesContainer.appendChild(messageElement);
+        
+    //     // Re-initialize icons for new message
+    //     this.initIcons();
+        
+    //     // Scroll to bottom
+    //     this.scrollChatToBottom();
+        
+    //     // Show notification if chat is closed and it's a bot message
+    //     if (!this.chatState.isOpen && message.type === 'bot') {
+    //         this.showChatNotification();
+    //     }
+    // }
+
+    // formatMessageText(text) {
+    //     if (!text) return '';
+        
+    //     // Escape HTML first
+    //     let formatted = this.escapeHtml(text);
+        
+    //     // Convert line breaks to <br>
+    //     formatted = formatted.replace(/\n/g, '<br>');
+        
+    //     // Convert URLs to clickable links (simple regex for basic URLs)
+    //     formatted = formatted.replace(
+    //         /(https?:\/\/[^\s<>"{}|\\^`[\]]+)/gi,
+    //         '<a href="$1" target="_blank" rel="noopener noreferrer" class="chat-link">$1</a>'
+    //     );
+        
+    //     // Convert www. links to clickable links
+    //     formatted = formatted.replace(
+    //         /\[([^\]]+)\]\(([^)]+)\)/g,
+    //         '<a href="$2" target="_blank" rel="noopener noreferrer" class="chat-link">$1</a>'
+    //     );
+        
+    //     return formatted;
+    // }
+
+    // showTypingIndicator() {
+    //     const messagesContainer = document.getElementById('floatingChatMessages');
+    //     if (!messagesContainer) return;
+
+    //     // Remove existing typing indicator if any
+    //     const existingTyping = document.getElementById('typingIndicator');
+    //     if (existingTyping) {
+    //         existingTyping.remove();
+    //     }
+
+    //     const typingElement = document.createElement('div');
+    //     typingElement.className = 'typing-indicator';
+    //     typingElement.id = 'typingIndicator';
+    //     typingElement.innerHTML = `
+    //         <div class="message-avatar">
+    //             <i data-lucide="bot" class="icon"></i>
+    //         </div>
+    //         <div class="typing-dots">
+    //             <div class="typing-dot"></div>
+    //             <div class="typing-dot"></div>
+    //             <div class="typing-dot"></div>
+    //         </div>
+    //     `;
+
+    //     messagesContainer.appendChild(typingElement);
+    //     this.initIcons();
+    //     this.scrollChatToBottom();
+    //     this.chatState.isTyping = true;
+    // }
+
+    // hideTypingIndicator() {
+    //     const typingIndicator = document.getElementById('typingIndicator');
+    //     if (typingIndicator) {
+    //         typingIndicator.remove();
+    //     }
+    //     this.chatState.isTyping = false;
+    // }
+
+    // scrollChatToBottom() {
+    //     const messagesContainer = document.getElementById('floatingChatMessages');
+    //     if (messagesContainer) {
+    //         setTimeout(() => {
+    //             messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    //         }, 100);
+    //     }
+    // }
+
+    // showChatNotification() {
+    //     const notificationBadge = document.getElementById('notificationBadge');
+    //     if (notificationBadge && !this.chatState.isOpen) {
+    //         notificationBadge.style.display = 'flex';
+    //         this.chatState.hasNewMessage = true;
+    //     }
+    // }
+
+    // formatMessageTime(timestamp) {
+    //     const now = new Date();
+    //     const messageTime = new Date(timestamp);
+    //     const diffMinutes = Math.floor((now - messageTime) / (1000 * 60));
+        
+    //     if (diffMinutes < 1) return 'Now';
+    //     if (diffMinutes < 60) return `${diffMinutes}m ago`;
+        
+    //     const diffHours = Math.floor(diffMinutes / 60);
+    //     if (diffHours < 24) return `${diffHours}h ago`;
+        
+    //     return messageTime.toLocaleDateString();
+    // }
+
+    // escapeHtml(text) {
+    //     const div = document.createElement('div');
+    //     div.textContent = text;
+    //     return div.innerHTML;
+    // }
     async sendQuickMessage(message) {
-        const chatInput = document.getElementById('floatingChatInput');
-        if (chatInput) {
-            chatInput.value = message;
-            await this.sendMessage();
-        }
+    const chatInput = document.getElementById('floatingChatInput');
+    if (chatInput) {
+        chatInput.value = message;
+        await this.sendMessage();
     }
+}
 
-    async callChatbotAPI(userMessage) {
-        const payload = {
-            message: userMessage,
-            context: {
-                current_portal: this.currentPortal,
-                conversation_history: this.chatState.messages.slice(-5).map(msg => ({
-                    type: msg.type,
-                    text: msg.text,
-                    timestamp: msg.timestamp
-                })), // Last 5 messages for context
-                timestamp: new Date().toISOString(),
-                available_features: {
-                    delay_prediction: true,
-                    route_analysis: true,
-                    alternative_flights: true,
-                    airline_stats: true
-                }
+async callChatbotAPI(userMessage) {
+    const payload = {
+        message: userMessage,
+        context: {
+            current_portal: this.currentPortal,
+            conversation_history: this.chatState.messages.slice(-5).map(msg => ({
+                type: msg.type,
+                text: msg.text,
+                timestamp: msg.timestamp
+            })), // Last 5 messages for context
+            timestamp: new Date().toISOString(),
+            available_features: {
+                delay_prediction: true,
+                route_analysis: true,
+                alternative_flights: true,
+                airline_stats: true
             }
-        };
+        }
+    };
 
-        console.log('Sending to chatbot API:', payload);
+    console.log('Sending to chatbot API:', payload);
 
-        const response = await fetch(this.CHATBOT_API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(payload)
+    const response = await fetch(this.CHATBOT_API_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Chatbot API error details:', {
+            status: response.status,
+            statusText: response.statusText,
+            body: errorText
         });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Chatbot API error details:', {
-                status: response.status,
-                statusText: response.statusText,
-                body: errorText
-            });
-            throw new Error(`Chatbot API error: ${response.status} - ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        console.log('Chatbot API response:', data);
-        
-        return data;
+        throw new Error(`Chatbot API error: ${response.status} - ${response.statusText}`);
     }
 
-    addMessageToUI(message) {
-        const messagesContainer = document.getElementById('floatingChatMessages');
-        if (!messagesContainer) return;
+    const data = await response.json();
+    console.log('Chatbot API response:', data);
+    
+    // Extract the response text from the JSON structure
+    return {
+        response: data.response || data.message || 'Sorry, I could not process your request.',
+        timestamp: new Date().toISOString()
+    };
+}
 
-        const messageElement = document.createElement('div');
-        messageElement.className = `message ${message.type}-message`;
-        
-        const timeStr = this.formatMessageTime(message.timestamp);
-        
-        // Format the message text to handle line breaks and links
-        const formattedText = this.formatMessageText(message.text);
-        
-        if (message.type === 'bot') {
-            messageElement.innerHTML = `
-                <div class="message-avatar">
-                    <i data-lucide="bot" class="icon"></i>
-                </div>
-                <div class="message-content">
-                    <div class="message-text">${formattedText}</div>
-                    <div class="message-time">${timeStr}</div>
-                </div>
-            `;
-        } else {
-            messageElement.innerHTML = `
-                <div class="message-avatar">
-                    <i data-lucide="user" class="icon"></i>
-                </div>
-                <div class="message-content">
-                    <div class="message-text">${this.escapeHtml(message.text)}</div>
-                    <div class="message-time">${timeStr}</div>
-                </div>
-            `;
-        }
+addMessageToUI(message) {
+    const messagesContainer = document.getElementById('floatingChatMessages');
+    if (!messagesContainer) return;
 
-        messagesContainer.appendChild(messageElement);
-        
-        // Re-initialize icons for new message
-        this.initIcons();
-        
-        // Scroll to bottom
-        this.scrollChatToBottom();
-        
-        // Show notification if chat is closed and it's a bot message
-        if (!this.chatState.isOpen && message.type === 'bot') {
-            this.showChatNotification();
-        }
-    }
-
-    formatMessageText(text) {
-        if (!text) return '';
-        
-        // Escape HTML first
-        let formatted = this.escapeHtml(text);
-        
-        // Convert line breaks to <br>
-        formatted = formatted.replace(/\n/g, '<br>');
-        
-        // Convert URLs to clickable links (simple regex for basic URLs)
-        formatted = formatted.replace(
-            /(https?:\/\/[^\s<>"{}|\\^`[\]]+)/gi,
-            '<a href="$1" target="_blank" rel="noopener noreferrer" class="chat-link">$1</a>'
-        );
-        
-        // Convert www. links to clickable links
-        formatted = formatted.replace(
-            /\[([^\]]+)\]\(([^)]+)\)/g,
-            '<a href="$2" target="_blank" rel="noopener noreferrer" class="chat-link">$1</a>'
-        );
-        
-        return formatted;
-    }
-
-    showTypingIndicator() {
-        const messagesContainer = document.getElementById('floatingChatMessages');
-        if (!messagesContainer) return;
-
-        // Remove existing typing indicator if any
-        const existingTyping = document.getElementById('typingIndicator');
-        if (existingTyping) {
-            existingTyping.remove();
-        }
-
-        const typingElement = document.createElement('div');
-        typingElement.className = 'typing-indicator';
-        typingElement.id = 'typingIndicator';
-        typingElement.innerHTML = `
+    const messageElement = document.createElement('div');
+    messageElement.className = `message ${message.type}-message`;
+    
+    const timeStr = this.formatMessageTime(message.timestamp);
+    
+    // Format the message text to handle line breaks and links
+    const formattedText = this.formatMessageText(message.text);
+    
+    if (message.type === 'bot') {
+        messageElement.innerHTML = `
             <div class="message-avatar">
                 <i data-lucide="bot" class="icon"></i>
             </div>
-            <div class="typing-dots">
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
+            <div class="message-content">
+                <div class="message-text">${formattedText}</div>
+                <div class="message-time">${timeStr}</div>
             </div>
         `;
-
-        messagesContainer.appendChild(typingElement);
-        this.initIcons();
-        this.scrollChatToBottom();
-        this.chatState.isTyping = true;
+    } else {
+        messageElement.innerHTML = `
+            <div class="message-avatar">
+                <i data-lucide="user" class="icon"></i>
+            </div>
+            <div class="message-content">
+                <div class="message-text">${this.escapeHtml(message.text)}</div>
+                <div class="message-time">${timeStr}</div>
+            </div>
+        `;
     }
 
-    hideTypingIndicator() {
-        const typingIndicator = document.getElementById('typingIndicator');
-        if (typingIndicator) {
-            typingIndicator.remove();
-        }
-        this.chatState.isTyping = false;
+    messagesContainer.appendChild(messageElement);
+    
+    // Re-initialize icons for new message
+    this.initIcons();
+    
+    // Scroll to bottom
+    this.scrollChatToBottom();
+    
+    // Show notification if chat is closed and it's a bot message
+    if (!this.chatState.isOpen && message.type === 'bot') {
+        this.showChatNotification();
     }
+}
 
-    scrollChatToBottom() {
-        const messagesContainer = document.getElementById('floatingChatMessages');
-        if (messagesContainer) {
-            setTimeout(() => {
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            }, 100);
-        }
-    }
-
-    showChatNotification() {
-        const notificationBadge = document.getElementById('notificationBadge');
-        if (notificationBadge && !this.chatState.isOpen) {
-            notificationBadge.style.display = 'flex';
-            this.chatState.hasNewMessage = true;
-        }
-    }
-
-    formatMessageTime(timestamp) {
-        const now = new Date();
-        const messageTime = new Date(timestamp);
-        const diffMinutes = Math.floor((now - messageTime) / (1000 * 60));
+// Updated function to handle the API response
+async sendMessage() {
+    const input = document.getElementById('floatingChatInput');
+    const sendBtn = document.getElementById('sendBtn');
+    
+    if (!input || !input.value.trim()) return;
+    
+    const userMessage = input.value.trim();
+    input.value = '';
+    
+    // Disable send button
+    if (sendBtn) sendBtn.disabled = true;
+    
+    // Add user message to UI
+    const userMsg = {
+        type: 'user',
+        text: userMessage,
+        timestamp: new Date().toISOString()
+    };
+    this.chatState.messages.push(userMsg);
+    this.addMessageToUI(userMsg);
+    
+    // Show typing indicator
+    this.showTypingIndicator();
+    
+    try {
+        // Call the API and get the structured response
+        const apiResponse = await this.callChatbotAPI(userMessage);
         
-        if (diffMinutes < 1) return 'Now';
-        if (diffMinutes < 60) return `${diffMinutes}m ago`;
+        // Hide typing indicator
+        this.hideTypingIndicator();
         
-        const diffHours = Math.floor(diffMinutes / 60);
-        if (diffHours < 24) return `${diffHours}h ago`;
+        // Add bot message to UI
+        const botMsg = {
+            type: 'bot',
+            text: apiResponse.response, // Use the 'response' field from JSON
+            timestamp: apiResponse.timestamp || new Date().toISOString()
+        };
+        this.chatState.messages.push(botMsg);
+        this.addMessageToUI(botMsg);
         
-        return messageTime.toLocaleDateString();
+    } catch (error) {
+        console.error('Error sending message:', error);
+        
+        // Hide typing indicator
+        this.hideTypingIndicator();
+        
+        // Show error message
+        const errorMsg = {
+            type: 'bot',
+            text: 'Sorry, I encountered an error while processing your message. Please try again.',
+            timestamp: new Date().toISOString()
+        };
+        this.chatState.messages.push(errorMsg);
+        this.addMessageToUI(errorMsg);
+    } finally {
+        // Re-enable send button
+        if (sendBtn) sendBtn.disabled = false;
+        
+        // Focus back on input
+        input.focus();
+    }
+}
+
+formatMessageText(text) {
+    if (!text) return '';
+    
+    // Escape HTML first
+    let formatted = this.escapeHtml(text);
+    
+    // Convert line breaks to <br>
+    formatted = formatted.replace(/\n/g, '<br>');
+    
+    // Convert URLs to clickable links (simple regex for basic URLs)
+    formatted = formatted.replace(
+        /(https?:\/\/[^\s<>"{}|\\^`[\]]+)/gi,
+        '<a href="$1" target="_blank" rel="noopener noreferrer" class="chat-link">$1</a>'
+    );
+    
+    // Convert markdown-style links to clickable links
+    formatted = formatted.replace(
+        /\[([^\]]+)\]\(([^)]+)\)/g,
+        '<a href="$2" target="_blank" rel="noopener noreferrer" class="chat-link">$1</a>'
+    );
+    
+    return formatted;
+}
+
+showTypingIndicator() {
+    const messagesContainer = document.getElementById('floatingChatMessages');
+    if (!messagesContainer) return;
+
+    // Remove existing typing indicator if any
+    const existingTyping = document.getElementById('typingIndicator');
+    if (existingTyping) {
+        existingTyping.remove();
     }
 
-    escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
+    const typingElement = document.createElement('div');
+    typingElement.className = 'typing-indicator';
+    typingElement.id = 'typingIndicator';
+    typingElement.innerHTML = `
+        <div class="message-avatar">
+            <i data-lucide="bot" class="icon"></i>
+        </div>
+        <div class="typing-dots">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+        </div>
+    `;
 
+    messagesContainer.appendChild(typingElement);
+    this.initIcons();
+    this.scrollChatToBottom();
+    this.chatState.isTyping = true;
+}
+
+hideTypingIndicator() {
+    const typingIndicator = document.getElementById('typingIndicator');
+    if (typingIndicator) {
+        typingIndicator.remove();
+    }
+    this.chatState.isTyping = false;
+}
+
+scrollChatToBottom() {
+    const messagesContainer = document.getElementById('floatingChatMessages');
+    if (messagesContainer) {
+        setTimeout(() => {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }, 100);
+    }
+}
+
+showChatNotification() {
+    const notificationBadge = document.getElementById('notificationBadge');
+    if (notificationBadge && !this.chatState.isOpen) {
+        notificationBadge.style.display = 'flex';
+        this.chatState.hasNewMessage = true;
+    }
+}
+
+formatMessageTime(timestamp) {
+    const now = new Date();
+    const messageTime = new Date(timestamp);
+    const diffMinutes = Math.floor((now - messageTime) / (1000 * 60));
+    
+    if (diffMinutes < 1) return 'Now';
+    if (diffMinutes < 60) return `${diffMinutes}m ago`;
+    
+    const diffHours = Math.floor(diffMinutes / 60);
+    if (diffHours < 24) return `${diffHours}h ago`;
+    
+    return messageTime.toLocaleDateString();
+}
+
+escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
     // === END CHATBOT IMPLEMENTATION ===
     
 
