@@ -4,9 +4,8 @@ class FlightPredictApp {
         this.data = null;
         this.charts = {};
         //this.API_BASE_URL = 'http://127.0.0.1:8000';
-        this.API_BASE_URL='https://model-api-flights.onrender.com'
-        //this.STATS_API_BASE_URL = 'http://192.168.29.86:5001';
-        this.CHATBOT_API_URL = 'http://127.0.0.1:8020/chat'; // Updated to correct chatbot API endpoint
+        this.API_BASE_URL='https://model-api-flights.onrender.com';
+        this.CHATBOT_API_URL = 'https://model-api-flights.onrender.com/chat'; 
         
         // Chatbot state
         this.chatState = {
